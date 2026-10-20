@@ -28,10 +28,21 @@ linux-doctor --help
 
 **En la versión 0.1 `--repair` solo sugiere reparaciones**, no ejecuta cambios. El diagnóstico no modifica el sistema, no eleva privilegios, no reinicia servicios ni intenta conectarse a internet. La presencia de herramientas no garantiza su funcionamiento; no confundir presencia de DNS con conectividad real. El diagnóstico de fuentes detecta también el fallo conocido del fork de dwm cuando solicita Ubuntu y no está instalada.
 
+## Servicios (OpenRC y systemd)
+
+Además de comprobar si existen los comandos, `linux-doctor` consulta **sin cambios** el estado de servicios mediante `rc-service <servicio> status` en Alpine y `systemctl is-active <servicio>.service` en Debian/Ubuntu.
+
+- Bluetooth: consulta `bluetooth` cuando existe `bluetoothctl`.
+- Red: consulta `NetworkManager` si existe `nmcli`, o `wpa_supplicant` si existe `wpa_cli`.
+- `OK`: servicio activo. `WARN`: servicio registrado pero detenido o fallido. `SKIP`: sin herramienta, servicio no registrado o estado no verificable.
+
+Estas comprobaciones son **orientativas**: pueden existir gestores alternativos, sesiones sin systemd, un adaptador Bluetooth ausente, o procesos de Wi-Fi ejecutados directamente sin servicio registrado. No se hacen conexiones a Internet ni se ejecutan `start`, `stop`, `enable` o `restart`. Un servicio activo no demuestra que tenga acceso a Internet ni que detecte un dispositivo físico.
+
 ## Pruebas
 
 ```sh
 sh tests/check.sh
+sh tests/services.sh
 ```
 
 Shell POSIX en Alpine y Debian/Ubuntu. Python 3 solo se utiliza en tests para validar JSON; no es una dependencia del programa. Los módulos opcionales ausentes nunca deben marcarse como errores por sí solos.
