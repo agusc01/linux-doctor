@@ -3,6 +3,9 @@ set -eu
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 sh -n "$root/doctor.sh"
 sh -n "$root/lib/core.sh"
+sh -n "$root/lib/services.sh"
+sh -n "$root/tests/services.sh"
+sh "$root/tests/services.sh"
 sh -n "$root/install.sh"
 sh "$root/doctor.sh" --version | grep -q '0.1.0'
 sh "$root/doctor.sh" --help | grep -q -- '--json'
@@ -29,6 +32,7 @@ sh "$root/install.sh" --dry-run | grep -q 'sin root'
 mkdir -p "$tmp/home"
 HOME="$tmp/home" sh "$root/install.sh"
 test -x "$tmp/home/.local/bin/linux-doctor"
+test -f "$tmp/home/.local/share/linux-doctor/lib/services.sh"
 HOME="$tmp/home" "$tmp/home/.local/bin/linux-doctor" --version | grep -q '0.1.0'
 if HOME="$tmp/home" sh "$root/install.sh" >/dev/null 2>&1; then
     echo 'FALLO: sobrescritura no bloqueada' >&2; exit 1
