@@ -3,6 +3,7 @@
 set -eu
 BASE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 . "$BASE/lib/core.sh"
+. "$BASE/lib/services.sh"
 json=0
 verbose=0
 repair=0

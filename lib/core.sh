@@ -74,6 +74,7 @@ ld_run() {
     else ld_add SKIP wifi 'Wi-Fi no detectado'; fi
     if ld_has bluetoothctl; then ld_add OK bluetooth 'bluetoothctl disponible'
     else ld_add SKIP bluetooth 'Bluetooth no detectado'; fi
+    ld_check_services
 }
 ld_json_escape() {
     printf '%s' "$1" | awk 'BEGIN { ORS="" } { gsub(/\\/, "\\\\"); gsub(/"/, "\\\""); gsub(/\t/, "\\t"); printf "%s", $0 }'
