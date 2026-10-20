@@ -26,6 +26,7 @@ export PATH
 . "$root/lib/services.sh"
 distro=debian
 ld_init
+trap 'rm -f "$LD_RESULTS"; rm -rf "$tmp"' EXIT HUP INT TERM
 TEST_STATE=active
 export TEST_STATE
 ld_check_services
