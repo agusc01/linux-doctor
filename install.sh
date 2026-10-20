@@ -17,6 +17,7 @@ fi
 mkdir -p "$HOME/.local/bin" "$HOME/.local/share/linux-doctor/lib"
 cp "$root/doctor.sh" "$HOME/.local/share/linux-doctor/doctor.sh"
 cp "$root/lib/core.sh" "$HOME/.local/share/linux-doctor/lib/core.sh"
+cp "$root/lib/services.sh" "$HOME/.local/share/linux-doctor/lib/services.sh"
 chmod 755 "$HOME/.local/share/linux-doctor/doctor.sh"
 cat > "$target" <<'WRAPPER'
 #!/bin/sh
