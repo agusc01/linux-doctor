@@ -1,0 +1,20 @@
+name: Linux Doctor Tests
+on:
+  push:
+  pull_request:
+jobs:
+  debian:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell and JSON tests
+        run: sh tests/check.sh
+  alpine:
+    runs-on: ubuntu-latest
+    container: alpine:3.22
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test dependencies
+        run: apk add --no-cache python3
+      - name: Shell and JSON tests
+        run: sh tests/check.sh
