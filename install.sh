@@ -13,7 +13,6 @@ case "${1-}" in
     '') ;;
     *) echo 'Opción desconocida.' >&2; exit 2 ;;
 esac
-[ "$(id -u)" -ne 0 ] || { echo 'Ejecutar como usuario normal.' >&2; exit 1; }
 for file in doctor.sh lib/core.sh lib/services.sh; do
     [ -f "$root/$file" ] && [ ! -L "$root/$file" ] || {
         echo "Fuente incompleta o enlazada: $file" >&2; exit 1
