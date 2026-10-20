@@ -37,6 +37,20 @@ HOME="$tmp/home" "$tmp/home/.local/bin/linux-doctor" --version | grep -q '0.1.0'
 if HOME="$tmp/home" sh "$root/install.sh" >/dev/null 2>&1; then
     echo 'FALLO: sobrescritura no bloqueada' >&2; exit 1
 fi
+# Actualización explícita: se preservan configuraciones y se guarda el respaldo.
+printf '%s\\n' 'configuracion personalizada' > "$tmp/home/.local/share/linux-doctor/personal.conf"
+HOME="$tmp/home" sh "$root/install.sh" --update
+test -f "$tmp/home/.local/share/linux-doctor/personal.conf"
+test "$(cat "$tmp/home/.local/share/linux-doctor/personal.conf")" = 'configuracion personalizada'
+test -f "$tmp/home/.local/share/linux-doctor/lib/services.sh"
+find "$tmp/home/.local/state/linux-doctor/backups" -name personal.conf | grep -q .
+HOME="$tmp/home" "$tmp/home/.local/bin/linux-doctor" --version | grep -q '0.1.0'
+# No modificar archivos ajenos: una alteración del launcher impide actualizar.
+printf '%s\\n' '#!/bin/sh' 'exit 42' > "$tmp/home/.local/bin/linux-doctor"
+if HOME="$tmp/home" sh "$root/install.sh" --update >/dev/null 2>&1; then
+    echo 'FALLO: actualización aceptó un launcher ajeno.' >&2; exit 1
+fi
+test "$(cat "$tmp/home/.local/share/linux-doctor/personal.conf")" = 'configuracion personalizada'
 printf 'ID=debian\n' > "$tmp/os-release"
 LINUX_DOCTOR_OS_RELEASE="$tmp/os-release" sh "$root/doctor.sh" --json > "$tmp/result" || [ "$?" -eq 1 ]
 python3 - "$tmp/result" <<'PY'
