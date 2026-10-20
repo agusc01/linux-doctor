@@ -13,6 +13,20 @@ sh install.sh
 
 Se instala en `~/.local/bin/linux-doctor` y `~/.local/share/linux-doctor` sin sudo ni doas. No sobrescribe lanzadores preexistentes. Para usar el comando, `~/.local/bin` debe estar en el PATH. Alternativamente ejecutá `sh doctor.sh` desde el clon.
 
+## Actualización explícita y segura
+
+La instalación normal **no sobrescribe nada**. Para actualizar una instalación anterior que pertenezca a linux-doctor, descargá la revisión nueva y ejecutá:
+
+```sh
+sh install.sh --update
+```
+
+Si lo instalaste desde [linux-setup](https://github.com/agusc01/linux-setup), la actualización puede realizarse con `sh install.sh --modules doctor --update` desde ese repositorio, una vez integrado el módulo de actualización.
+
+`--update` verifica que el lanzador sea el propio de linux-doctor y que los archivos existentes no sean enlaces simbólicos. Copia el directorio existente a un área temporal, conserva archivos adicionales (como preferencias), valida la sintaxis del código nuevo y lo sustituye después de guardar la versión anterior bajo `~/.local/state/linux-doctor/backups/`. Si falla el reemplazo intenta restaurar automáticamente la versión previa. No necesita `sudo` o `doas`, no actualiza otros módulos y no ejecuta las reparaciones de `linux-doctor --repair`.
+
+**Importante:** la operación utiliza los archivos de la copia fuente desde la que ejecutás `install.sh`: obtené previamente una revisión actualizada o usá el comando de `linux-setup`, que descarga una copia temporal nueva. El respaldo queda disponible para recuperación manual. La comprobación de archivos administrados impide sobrescribir instalaciones que no reconozca.
+
 ## Opciones
 
 ```sh
