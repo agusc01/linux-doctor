@@ -17,7 +17,7 @@ ld_add() {
 }
 ld_run() {
     os_file=/etc/os-release
-    if [ -n "$LINUX_DOCTOR_OS_RELEASE" ]; then os_file=$LINUX_DOCTOR_OS_RELEASE; fi
+    if [ -n "${LINUX_DOCTOR_OS_RELEASE:-}" ]; then os_file=$LINUX_DOCTOR_OS_RELEASE; fi
     if [ -r "$os_file" ]; then
         distro=$(sed -n 's/^ID=//p' "$os_file" | head -n 1 | tr -d '"')
     else distro=''; fi
@@ -53,7 +53,7 @@ ld_run() {
             ld_add FAIL fuentes 'Sin fuente monoespaciada resoluble'
         else ld_add OK fuentes 'Fuente monoespaciada resoluble'; fi
         config=/usr/src/suckless/dwm/config.h
-        if [ -n "$LINUX_DOCTOR_DWM_CONFIG" ]; then config=$LINUX_DOCTOR_DWM_CONFIG; fi
+        if [ -n "${LINUX_DOCTOR_DWM_CONFIG:-}" ]; then config=$LINUX_DOCTOR_DWM_CONFIG; fi
         if [ -f "$config" ] && grep -q 'Ubuntu:size=' "$config"; then
             if ld_has fc-list && fc-list : family 2>/dev/null | grep -iE '(^|,|[[:space:]])Ubuntu([,[:space:]]|$)' >/dev/null; then
                 ld_add OK fuente-ubuntu 'Fuente Ubuntu disponible'
